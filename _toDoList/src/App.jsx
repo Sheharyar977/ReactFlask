@@ -9,9 +9,13 @@ function App() {
   // object for storing and using data
 
 const fetchAPI = async () => {
-  const response = await axios.get("http://127.0.0.1:8080/api/users")
-  console.log(response.data.users);
-  setArray(response.data.users);
+  const response = await fetch("http://127.0.0.1:8080/api/test")
+  const data = await response.json()
+  setArray(data.tasks)
+  console.log(data.tasks)
+  
+  //console.log(response.data.tasks.task);
+  //setArray(response.data.users);
 }; 
 
 useEffect(() => { 
@@ -19,10 +23,12 @@ useEffect(() => {
 }, [] );
 
 
+
 const [todos, settodos] = useState([]); 
 
 useEffect(() => { 
-  settodos(array); 
+  const taskArray = array.map((item) => item.task);
+  settodos(taskArray); 
 }, [array]);
 
 
@@ -34,6 +40,7 @@ const [todoValue, settodoValue] = useState('');
 
 
 function handleAddTodos(newTodo) { 
+  
   let newTodoList = [...todos, newTodo]; 
   console.log(newTodoList) ;
   settodos(newTodoList); 
@@ -44,6 +51,7 @@ function handleDeleteTodo(index) {
     return todoIndex !== index 
   })
   settodos(newTodoList); 
+  //delete in database 
 }
 
 function handleEditTodo(index) { 
@@ -60,13 +68,10 @@ return(
   <main> 
     <TodoInput todoValue={todoValue} settodoValue={settodoValue} handleAddTodos = {handleAddTodos} />
     <TodoList  handleEditTodo={handleEditTodo} handleDeleteTodo = {handleDeleteTodo} todos = {todos} /> 
-    <p>     { 
-          array.map((user,index) => ( 
-            <span key={index}> {user} </span>
-          )
-          )} </p>
   </main>
 )
+
+
 }
 
 
@@ -75,4 +80,5 @@ export default App
 
 
 
- 
+
+
